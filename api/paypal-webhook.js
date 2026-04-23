@@ -22,9 +22,10 @@ export default async function handler(req, res) {
 
   const event = req.body;
 
-  // 3. Look for "COMPLETED" status
-  // PayPal sends different event types; this one means "money received"
-  if (event.event_type === "PAYMENT.CAPTURE.COMPLETED") {
+  // 3. Look for "APPROVED" status
+  // PAYMENT.CAPTURE.COMPLETED doesn't contain the buyer's name.
+  // CHECKOUT.ORDER.APPROVED contains the payer object with their name!
+  if (event.event_type === "CHECKOUT.ORDER.APPROVED") {
     const payerName =
       event.resource?.payer?.name?.given_name || "Anonymous Legend";
 
