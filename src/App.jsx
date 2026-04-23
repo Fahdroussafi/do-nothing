@@ -5,7 +5,7 @@ const fetchPlayers = async () => {
   const { data, error } = await supabase
     .from("players")
     .select("*")
-    .order("total_spent", { ascending: false });
+    .order("total_spent", { ascending: true });
 
   if (error) throw new Error(error.message);
   return data;
