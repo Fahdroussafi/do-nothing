@@ -56,7 +56,6 @@ function App() {
               <tr className="bg-white/5 text-[#8b949e] text-[10px] uppercase tracking-[0.2em] border-b border-white/5">
                 <th className="p-6 text-left font-black w-24">Rank</th>
                 <th className="p-6 text-left font-black">Name</th>
-                <th className="p-6 text-center font-black">Purchases</th>
                 <th className="p-6 text-right font-black">Total Spent</th>
               </tr>
             </thead>
@@ -91,11 +90,6 @@ function App() {
                           </span>
                         )}
                       </div>
-                    </td>
-                    <td className="p-6 text-center">
-                      <span className="font-mono text-white/70 text-xl tabular-nums">
-                        {player.purchases_count || 0}
-                      </span>
                     </td>
                     <td className="p-6 text-right">
                       <span className="font-mono text-brand-green text-2xl md:text-3xl tabular-nums">
