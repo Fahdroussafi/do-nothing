@@ -1,12 +1,11 @@
 import { useQuery } from "@tanstack/react-query";
-import { useEffect, useState } from "react";
 import { supabase } from "./utils/supabase";
 
 const fetchPlayers = async () => {
   const { data, error } = await supabase
     .from("players")
     .select("*")
-    .order("created_at", { ascending: true });
+    .order("total_spent", { ascending: false });
 
   if (error) throw new Error(error.message);
   return data;
@@ -19,22 +18,11 @@ function App() {
     refetchInterval: 10000,
   });
 
-  const [now, setNow] = useState(new Date());
-  useEffect(() => {
-    const timer = setInterval(() => setNow(new Date()), 1000);
-    return () => clearInterval(timer);
-  }, []);
-
-  const formatTime = (createdAt) => {
-    const diff = now - new Date(createdAt);
-    if (diff < 0) return "00:00:00";
-    const totalSeconds = Math.floor(diff / 1000);
-    const hours = Math.floor(totalSeconds / 3600);
-    const minutes = Math.floor((totalSeconds % 3600) / 60);
-    const seconds = totalSeconds % 60;
-    return [hours, minutes, seconds]
-      .map((v) => v.toString().padStart(2, "0"))
-      .join(":");
+  const formatCurrency = (amount) => {
+    return new Intl.NumberFormat("en-US", {
+      style: "currency",
+      currency: "USD",
+    }).format(amount || 0);
   };
 
   return (
@@ -55,8 +43,9 @@ function App() {
           </span>
         </h1>
         <p className="text-[#8b949e] text-lg md:text-2xl mb-10 max-w-[600px] font-light leading-relaxed text-center">
-          Pay <span className="text-white font-semibold">$1</span> once to join
-          the exclusive group of humans doing absolutely nothing.
+          Pay <span className="text-white font-semibold">$1</span> or more to
+          join the exclusive group of humans doing absolutely nothing. The more
+          you spend, the higher you climb.
         </p>
       </header>
 
@@ -65,16 +54,17 @@ function App() {
           <table className="w-full border-collapse">
             <thead>
               <tr className="bg-white/5 text-[#8b949e] text-[10px] uppercase tracking-[0.2em] border-b border-white/5">
-                <th className="p-6 text-left font-black">Rank</th>
+                <th className="p-6 text-left font-black w-24">Rank</th>
                 <th className="p-6 text-left font-black">Name</th>
-                <th className="p-6 text-right font-black">Total Time</th>
+                <th className="p-6 text-center font-black">Purchases</th>
+                <th className="p-6 text-right font-black">Total Spent</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-white/5">
               {isLoading ? (
                 <tr>
                   <td
-                    colSpan="3"
+                    colSpan="4"
                     className="p-24 text-center text-[#8b949e] font-light italic tracking-widest animate-pulse">
                     Loading...
                   </td>
@@ -96,15 +86,20 @@ function App() {
                           {player.name}
                         </span>
                         {index === 0 && (
-                          <span className="text-[10px] font-black uppercase tracking-widest text-yellow-500/80">
-                            The Nothing King
+                          <span className="text-[10px] font-black uppercase tracking-widest text-yellow-500/80 mt-1">
+                            Biggest Spender
                           </span>
                         )}
                       </div>
                     </td>
+                    <td className="p-6 text-center">
+                      <span className="font-mono text-white/70 text-xl tabular-nums">
+                        {player.purchases_count || 0}
+                      </span>
+                    </td>
                     <td className="p-6 text-right">
                       <span className="font-mono text-brand-green text-2xl md:text-3xl tabular-nums">
-                        {formatTime(player.created_at)}
+                        {formatCurrency(player.total_spent)}
                       </span>
                     </td>
                   </tr>
