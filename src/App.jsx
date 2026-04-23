@@ -108,7 +108,7 @@ function App() {
         <div className="text-center mb-8">
           <h2 className="text-3xl font-bold text-white mb-2">Want to join?</h2>
           <p className="text-[#8b949e] text-xs tracking-[0.3em] uppercase font-black">
-            Lifetime Entry • $1 One-time
+            Lifetime Entry • $1 One-time (or more if you're feeling generous)
           </p>
         </div>
 
