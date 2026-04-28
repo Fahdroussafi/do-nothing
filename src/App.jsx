@@ -1,4 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
+import { Analytics } from "@vercel/analytics/react";
 import { supabase } from "./utils/supabase";
 
 const fetchPlayers = async () => {
@@ -177,6 +178,7 @@ function App() {
           © 2026 The Do Nothing Club • All rights ignored.
         </p>
       </footer>
+      <Analytics />
     </div>
   );
 }
